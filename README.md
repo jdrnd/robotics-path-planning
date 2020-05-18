@@ -71,7 +71,17 @@ Currently due to the small size of the map nearest-neighbor calculations are per
 RRT’s (Choset)](https://www.cs.cmu.edu/~motionplanning/lecture/lec20.pdf)
 
 ### Importance Sampling
-TODO
+Importance sampling allows the sampling of one distribution using another. Even more impressively, it can be used to sample an unknown distribution using a known one. An example of this comes from a common use of importance sampling, namely particle filtering. In particle filters, we wish to sample from a probability distribution representing the state of the robot (eg. position), without any a priori knowledge about the robot's state. Since we control the sampling distribution, generally a uniform distribution is used.
+
+![](images/is_1.png)
+
+Importance sampling works by sampling from the initial distribution, and generating a set of weights from the set of samples. These weights are typically derived from the robot's sensors. In this case a score is generated according to how close the value is to 0.2 or 0.8 (this could correspond to the robot being at one of these locations). The weights correspond to how important the sample is, eg. how well the robot's sensors match what they should be at the sample's position. A cumulative sum of scores according to sample location is then formed, and as a result of this regions with the highest scores have the steepest slope. Then, uniformly sampling from the y-axis leads to more samples in areas with the highest scores, thus performing resampling according the the importance of each sample.   
+
+![](images/is_2.png)
+![](images/is_3.png)
+
+The final plot should then be normalized in order to form the new estimate of the underlying distribution's probability density function.
+
 #### Resources
 - [Autonomous Mobile Robotics (Waslander) Section 7: Estimation II](http://wavelab.uwaterloo.ca/sharedata/ME597/ME597_Lecture_Slides/ME597-5-EstimationII.pdf)
 

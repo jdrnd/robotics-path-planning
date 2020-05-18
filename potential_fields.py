@@ -107,10 +107,6 @@ def main():
     plt.title('Repulsive Potential Field from Obstacles')
 
     rep_potential = np.multiply(rep_potential, -1.0)
-
-
-    #plt.imshow(rep_potential)
-
     frepulse_y,  frepulse_x = np.gradient(rep_potential)
 
     # Create total force field
@@ -150,11 +146,6 @@ def main():
         r_state[1] = r_state[1] + v*math.sin(r_state[2]) * T
         r_state[2] = r_state[2] + w*T
 
-    # Add heading arrows to previous plot showing map
-    for i in range(len(pointsx)):
-        if i % 45 == 0:
-            # plt.arrow(pointsx[i], pointsy[i], 10*math.cos(headings[i]), 10*math.sin(headings[i]), color='red', width=0.5)
-            pass
     plt.scatter(pointsx, pointsy)
     plt.show()
 

@@ -129,45 +129,8 @@ def main():
     plt.imshow(pgm, cmap='gray', vmin=0, vmax=255, origin='lower')
     for i in range(len(path)-1):
         plt.plot([path[i][0], path[i+1][0]], [path[i][1], path[i+1][1]], c='red')
+    plt.title('Overall PPath for a Set of Waypoints')
 
-    # Run robot simulation
-    r_state = [0.5, 0.5, math.pi / 4 - 0.1]
-    T = 0.1
-
-    wgain = 3  # gain term for angular velocity controller
-    max_speed = 0.2  # m/s
-
-    pointsx = []
-    pointsy = []
-    headings = []
-    for goal_pos in path[1:]:  # 1st "goal state" is just the starting state
-        # Convert from pixels to meters
-        goal_pos = (goal_pos[0] / 10, goal_pos[1] / 10)
-        r_pos = (r_state[0], r_state[1])
-
-        # Navigate to within 10 cm of each end goal
-        while dist(r_pos, goal_pos) > 0.1:
-            pointsx.append(r_state[0] * 10)
-            pointsy.append(r_state[1] * 10)
-            headings.append(r_state[2])
-
-            target_heading = math.atan2(goal_pos[1] - r_pos[1], goal_pos[0] - r_pos[0])
-            heading_error = target_heading - r_state[2]
-            w = wgain * heading_error
-            v = max_speed
-
-            # Run state update using motion model
-            r_state[0] = r_state[0] + v * math.cos(r_state[2]) * T
-            r_state[1] = r_state[1] + v * math.sin(r_state[2]) * T
-            r_state[2] = r_state[2] + w * T
-
-            r_pos = (r_state[0], r_state[1])
-
-    # Add to previous plot
-    for i in range(len(pointsx)):
-        if i % 60 == 0:
-            plt.arrow(pointsx[i], pointsy[i], 5*math.cos(headings[i]), 5*math.sin(headings[i]), color='black', width=0.5)
-    plt.scatter(pointsx, pointsy)
     plt.show()
 
 

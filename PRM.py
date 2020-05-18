@@ -193,50 +193,6 @@ def main():
     plt.scatter([p[0] for p in positions], [p[1] for p in positions], c='black', s=70)
     plt.title("Final Path for a Set of Waypoints")
 
-    # Show the final path of waypoints to plot path onto
-    plt.figure()
-    plt.imshow(pgm, cmap='gray', vmin=BLACK, vmax=WHITE, origin='lower')
-    for i in range(len(total_path)-1):
-        plt.plot([total_path[i][0], total_path[i+1][0]], [total_path[i][1], total_path[i+1][1]], c='red')
-
-    # Run robot simulation
-    r_state = [0.5, 0.5, math.pi/4-0.1]
-    T = 0.1
-
-    wgain = 3  # gain term for angular velocity controller
-    max_speed = 0.2  # m/s
-
-    pointsx = []
-    pointsy = []
-    headings = []
-    for goal_pos in total_path[1:]:  # 1st "goal state" is just the starting state
-        # Convert from pixels to meters
-        goal_pos = (goal_pos[0] / 10, goal_pos[1] / 10)
-        r_pos = (r_state[0], r_state[1])
-
-        # Navigate to within 10 cm of each end goal
-        while dist(r_pos, goal_pos) > 0.1:
-            pointsx.append(r_state[0] * 10)
-            pointsy.append(r_state[1] * 10)
-            headings.append(r_state[2])
-
-            target_heading = math.atan2(goal_pos[1]-r_pos[1], goal_pos[0]-r_pos[0])
-            heading_error = target_heading - r_state[2]
-            w = wgain*heading_error
-            v = max_speed
-
-            # Run state update using motion model
-            r_state[0] = r_state[0] + v * math.cos(r_state[2]) * T
-            r_state[1] = r_state[1] + v * math.sin(r_state[2]) * T
-            r_state[2] = r_state[2] + w * T
-
-            r_pos = (r_state[0], r_state[1])
-
-    # Add to previous plot
-    for i in range(len(pointsx)):
-        if i % 45 == 0:
-            plt.arrow(pointsx[i], pointsy[i], 10*math.cos(headings[i]), 10*math.sin(headings[i]), color='red', width=0.5)
-    plt.scatter(pointsx, pointsy)
     plt.show()
 
 
