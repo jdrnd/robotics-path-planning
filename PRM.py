@@ -140,10 +140,11 @@ def main():
     y = [elem[1] for elem in points]
     plt.scatter(x, y, c='blue')
 
-    # Add viewing locations to plot
+    # Add goal locations to plot
     posex = [pos[0] for pos in positions]
     posey = [pos[1] for pos in positions]
-    plt.scatter(posex, posey, c='yellow')
+    plt.scatter(posex, posey, c='red')
+    plt.title('Randomly Sampled Map Positions')
 
     # Use a dictionary to represent the graph
     # Keys: a graph node
@@ -172,16 +173,17 @@ def main():
     for node in map_graph:
         for node2 in map_graph[node]:
             plt.plot([node[0], node2[0]], [node[1], node2[1]])
+    plt.title('Position Graph')
 
     # Calls to shortest_path will show explored paths
     plt.figure()
-    print(positions)
-    print(tuple(positions[0][0:2]))
     plt.imshow(pgm, cmap='gray', vmin=BLACK, vmax=WHITE, origin='lower')
     total_path = list()
     for i in range(len(positions)-1):
         total_path += shortest_path_a_star(tuple(positions[i][0:2]), tuple(positions[i+1][0:2]), map_graph)[:-1]
     total_path += [tuple(positions[-1][0:2])]
+    plt.title("A* Visualization for a Set of Waypoints")
+
 
     # Show the final path of waypoints
     plt.figure()
@@ -189,6 +191,7 @@ def main():
     for i in range(len(total_path)-1):
         plt.plot([total_path[i][0], total_path[i+1][0]], [total_path[i][1], total_path[i+1][1]], c='red')
     plt.scatter([p[0] for p in positions], [p[1] for p in positions], c='black', s=70)
+    plt.title("Final Path for a Set of Waypoints")
 
     # Show the final path of waypoints to plot path onto
     plt.figure()

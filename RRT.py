@@ -18,10 +18,9 @@ posns = [(pos[0], pos[1]) for pos in positions]
 def dist(p1, p2):
     return math.sqrt(pow(p2[0] - p1[0], 2) + pow(p2[1] - p1[1], 2))
 
-
+# Ensure point is not too close to an obstacle
 def is_clear(point, pgm):
     return (
-
             pgm[point[1]][point[0] - 3] == 255 and
             pgm[point[1]][point[0] + 3] == 255 and
             pgm[point[1] + 3][point[0]] == 255 and
@@ -106,6 +105,7 @@ def get_rrt_path(start, end, pgm):
     plt.figure()
     plot_tree(RRT, pgm)
     plt.scatter([start[0],end[0]], [start[1],end[1]], c='blue')
+    plt.title('Generated RRT with Start and End Positions')
 
     path = []
     node = end
